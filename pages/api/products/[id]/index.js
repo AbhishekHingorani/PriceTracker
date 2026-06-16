@@ -35,7 +35,7 @@ export default async function handler(req, res) {
 
   // ── PATCH ────────────────────────────────────────────────────────────────
   if (req.method === 'PATCH') {
-    const { name, url, targetPrice, cssSelector, apiEndpoint, useApiCheck } = req.body || {};
+    const { name, url, targetPrice, targetPrice2, targetPrice3, cssSelector, apiEndpoint, useApiCheck } = req.body || {};
     const update = {};
 
     if (name        !== undefined) update.name        = name.trim();
@@ -52,6 +52,34 @@ export default async function handler(req, res) {
       update.targetPrice = parsed;
       // Reset alertSent so the new target is evaluated fresh on next check
       update.alertSent = false;
+    }
+
+    if (targetPrice2 !== undefined) {
+      if (targetPrice2 === null || targetPrice2 === '') {
+        update.targetPrice2 = null;
+        update.alertSent2 = false;
+      } else {
+        const parsed = parseFloat(targetPrice2);
+        if (isNaN(parsed) || parsed <= 0) {
+          return res.status(400).json({ error: 'targetPrice2 must be a positive number' });
+        }
+        update.targetPrice2 = parsed;
+        update.alertSent2 = false;
+      }
+    }
+
+    if (targetPrice3 !== undefined) {
+      if (targetPrice3 === null || targetPrice3 === '') {
+        update.targetPrice3 = null;
+        update.alertSent3 = false;
+      } else {
+        const parsed = parseFloat(targetPrice3);
+        if (isNaN(parsed) || parsed <= 0) {
+          return res.status(400).json({ error: 'targetPrice3 must be a positive number' });
+        }
+        update.targetPrice3 = parsed;
+        update.alertSent3 = false;
+      }
     }
 
     if (Object.keys(update).length === 0) {

@@ -40,6 +40,8 @@ export default function ProductCard({ product, onUpdate, onDelete }) {
     name:        product.name,
     url:         product.url,
     targetPrice: product.targetPrice,
+    targetPrice2: product.targetPrice2 || '',
+    targetPrice3: product.targetPrice3 || '',
     cssSelector: product.cssSelector,
     apiEndpoint: product.apiEndpoint || '',
     useApiCheck: product.useApiCheck || false,
@@ -50,7 +52,9 @@ export default function ProductCard({ product, onUpdate, onDelete }) {
   const stats         = calcStats(currentProduct.priceHistory);
   const isBelowTarget =
     currentProduct.lastPrice !== null &&
-    currentProduct.lastPrice < currentProduct.targetPrice;
+    (currentProduct.lastPrice < currentProduct.targetPrice ||
+      (currentProduct.targetPrice2 && currentProduct.lastPrice < currentProduct.targetPrice2) ||
+      (currentProduct.targetPrice3 && currentProduct.lastPrice < currentProduct.targetPrice3));
 
   const showToast = (type, message) => {
     setToast({ type, message });
@@ -107,6 +111,22 @@ export default function ProductCard({ product, onUpdate, onDelete }) {
     if (isNaN(parsed) || parsed <= 0) {
       setEditError('Target price must be a positive number.');
       return;
+    }
+
+    if (editForm.targetPrice2) {
+      const parsed2 = parseFloat(editForm.targetPrice2);
+      if (isNaN(parsed2) || parsed2 <= 0) {
+        setEditError('Target price 2 must be a positive number.');
+        return;
+      }
+    }
+
+    if (editForm.targetPrice3) {
+      const parsed3 = parseFloat(editForm.targetPrice3);
+      if (isNaN(parsed3) || parsed3 <= 0) {
+        setEditError('Target price 3 must be a positive number.');
+        return;
+      }
     }
 
     setEditLoading(true);
@@ -178,6 +198,14 @@ export default function ProductCard({ product, onUpdate, onDelete }) {
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">Target Price (INR)</label>
                 <input type="number" name="targetPrice" value={editForm.targetPrice} onChange={handleEditChange} step="0.01" min="0.01" className={INPUT_CLASS} required />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">Target Price 2 (Optional)</label>
+                <input type="number" name="targetPrice2" value={editForm.targetPrice2} onChange={handleEditChange} step="0.01" min="0.01" className={INPUT_CLASS} />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">Target Price 3 (Optional)</label>
+                <input type="number" name="targetPrice3" value={editForm.targetPrice3} onChange={handleEditChange} step="0.01" min="0.01" className={INPUT_CLASS} />
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">CSS Selector</label>
@@ -275,6 +303,22 @@ export default function ProductCard({ product, onUpdate, onDelete }) {
             ₹{currentProduct.targetPrice.toFixed(2)}
           </p>
         </div>
+        {currentProduct.targetPrice2 && (
+          <div>
+            <p className="text-xs text-gray-500 mb-0.5">Target 2</p>
+            <p className="text-xl font-bold text-indigo-600">
+              ₹{currentProduct.targetPrice2.toFixed(2)}
+            </p>
+          </div>
+        )}
+        {currentProduct.targetPrice3 && (
+          <div>
+            <p className="text-xs text-gray-500 mb-0.5">Target 3</p>
+            <p className="text-xl font-bold text-indigo-600">
+              ₹{currentProduct.targetPrice3.toFixed(2)}
+            </p>
+          </div>
+        )}
         {isBelowTarget && (
           <span className="ml-auto text-xs font-semibold bg-green-100 text-green-700 px-2.5 py-1 rounded-full">
             Below target!

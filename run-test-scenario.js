@@ -12,6 +12,8 @@ async function testScenario({ name, url, cssSelector, expectedMsg }) {
       name: name,
       url: url,
       targetPrice: 1000,
+      targetPrice2: 900,
+      targetPrice3: 800,
       cssSelector: cssSelector
     })
   });

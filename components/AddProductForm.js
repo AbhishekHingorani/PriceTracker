@@ -28,6 +28,8 @@ export default function AddProductForm() {
     name:         '',
     url:          '',
     targetPrice:  '',
+    targetPrice2: '',
+    targetPrice3: '',
     cssSelector:  '',
     apiEndpoint:  '',
     useApiCheck:  false,
@@ -58,6 +60,22 @@ export default function AddProductForm() {
     if (isNaN(parsed) || parsed <= 0) {
       setError('Target price must be a positive number (e.g. 49.99).');
       return;
+    }
+
+    if (form.targetPrice2) {
+      const parsed2 = parseFloat(form.targetPrice2);
+      if (isNaN(parsed2) || parsed2 <= 0) {
+        setError('Target price 2 must be a positive number.');
+        return;
+      }
+    }
+
+    if (form.targetPrice3) {
+      const parsed3 = parseFloat(form.targetPrice3);
+      if (isNaN(parsed3) || parsed3 <= 0) {
+        setError('Target price 3 must be a positive number.');
+        return;
+      }
     }
 
     if (form.useApiCheck && !form.apiEndpoint.trim()) {
@@ -160,6 +178,54 @@ export default function AddProductForm() {
         <p className="text-xs text-gray-400 mt-1">
           You&apos;ll receive an alert when the price drops below this value.
         </p>
+      </div>
+
+      {/* ── Target Price 2 ──────────────────────────────────────────────────── */}
+      <div>
+        <label htmlFor="targetPrice2" className={LABEL_CLASS}>
+          Target Price 2 (Optional)
+        </label>
+        <div className="relative">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm select-none">
+            ₹
+          </span>
+          <input
+            id="targetPrice2"
+            type="number"
+            name="targetPrice2"
+            value={form.targetPrice2}
+            onChange={handleChange}
+            placeholder="149.99"
+            step="0.01"
+            min="0.01"
+            className={`${INPUT_CLASS} pl-7`}
+            disabled={loading}
+          />
+        </div>
+      </div>
+
+      {/* ── Target Price 3 ──────────────────────────────────────────────────── */}
+      <div>
+        <label htmlFor="targetPrice3" className={LABEL_CLASS}>
+          Target Price 3 (Optional)
+        </label>
+        <div className="relative">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm select-none">
+            ₹
+          </span>
+          <input
+            id="targetPrice3"
+            type="number"
+            name="targetPrice3"
+            value={form.targetPrice3}
+            onChange={handleChange}
+            placeholder="99.99"
+            step="0.01"
+            min="0.01"
+            className={`${INPUT_CLASS} pl-7`}
+            disabled={loading}
+          />
+        </div>
       </div>
 
       {/* ── CSS Selector ──────────────────────────────────────────────────── */}

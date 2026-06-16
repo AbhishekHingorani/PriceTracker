@@ -29,7 +29,10 @@ export default function ProductDetail({ product: initialProduct }) {
   const [toast,   setToast]   = useState(null);
 
   const isBelowTarget =
-    product.lastPrice !== null && product.lastPrice < product.targetPrice;
+    product.lastPrice !== null &&
+    (product.lastPrice < product.targetPrice ||
+    (product.targetPrice2 && product.lastPrice < product.targetPrice2) ||
+    (product.targetPrice3 && product.lastPrice < product.targetPrice3));
 
   const showToast = (type, message) => {
     setToast({ type, message });
@@ -131,6 +134,22 @@ export default function ProductDetail({ product: initialProduct }) {
                 ₹{product.targetPrice.toFixed(2)}
               </p>
             </div>
+            {product.targetPrice2 && (
+              <div>
+                <p className="text-xs text-gray-500 mb-0.5">Target Price 2</p>
+                <p className="text-3xl font-bold text-indigo-600 mt-1">
+                  ₹{product.targetPrice2.toFixed(2)}
+                </p>
+              </div>
+            )}
+            {product.targetPrice3 && (
+              <div>
+                <p className="text-xs text-gray-500 mb-0.5">Target Price 3</p>
+                <p className="text-3xl font-bold text-indigo-600 mt-1">
+                  ₹{product.targetPrice3.toFixed(2)}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Stats */}
@@ -177,8 +196,8 @@ export default function ProductDetail({ product: initialProduct }) {
             )}
             <div>
               <dt className="text-xs text-gray-400">Alert Status</dt>
-              <dd className={`font-medium ${product.alertSent ? 'text-orange-500' : 'text-gray-500'}`}>
-                {product.alertSent ? 'Alert sent — watching for price rise' : 'Watching for drop'}
+              <dd className={`font-medium ${(product.alertSent || product.alertSent2 || product.alertSent3) ? 'text-orange-500' : 'text-gray-500'}`}>
+                {(product.alertSent || product.alertSent2 || product.alertSent3) ? 'Alert sent — watching for price rise' : 'Watching for drop'}
               </dd>
             </div>
           </dl>

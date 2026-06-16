@@ -6,6 +6,8 @@
  *   name         {string}  required – human-readable product name
  *   url          {string}  required – product page URL
  *   targetPrice  {number}  required – price threshold for alerts
+ *   targetPrice2 {number}  optional – 2nd price threshold for alerts
+ *   targetPrice3 {number}  optional – 3rd price threshold for alerts
  *   cssSelector  {string}  required – CSS selector targeting the price element
  *   apiEndpoint  {string}  optional – JSON API URL for double-checking price
  *   useApiCheck  {boolean} optional – whether to use the API endpoint
@@ -34,7 +36,7 @@ export default async function handler(req, res) {
 
   // ── POST – add a product ─────────────────────────────────────────────────
   if (req.method === 'POST') {
-    const { name, url, targetPrice, cssSelector, apiEndpoint, useApiCheck } = req.body || {};
+    const { name, url, targetPrice, targetPrice2, targetPrice3, cssSelector, apiEndpoint, useApiCheck } = req.body || {};
 
     // Validate required fields
     if (!name?.trim() || !url?.trim() || !targetPrice || !cssSelector?.trim()) {
@@ -48,16 +50,36 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'targetPrice must be a positive number' });
     }
 
+    let parsedTarget2 = null;
+    if (targetPrice2 !== undefined && targetPrice2 !== '') {
+      parsedTarget2 = parseFloat(targetPrice2);
+      if (isNaN(parsedTarget2) || parsedTarget2 <= 0) {
+        return res.status(400).json({ error: 'targetPrice2 must be a positive number' });
+      }
+    }
+
+    let parsedTarget3 = null;
+    if (targetPrice3 !== undefined && targetPrice3 !== '') {
+      parsedTarget3 = parseFloat(targetPrice3);
+      if (isNaN(parsedTarget3) || parsedTarget3 <= 0) {
+        return res.status(400).json({ error: 'targetPrice3 must be a positive number' });
+      }
+    }
+
     const doc = {
       name:         name.trim(),
       url:          url.trim(),
       targetPrice:  parsedTarget,
+      targetPrice2: parsedTarget2,
+      targetPrice3: parsedTarget3,
       cssSelector:  cssSelector.trim(),
       apiEndpoint:  apiEndpoint?.trim() || null,
       useApiCheck:  Boolean(useApiCheck),
       lastPrice:    null,
       lastChecked:  null,
       alertSent:    false,
+      alertSent2:   false,
+      alertSent3:   false,
       errorAlertSent: false,
       priceHistory: [],
       createdAt:    new Date(),
