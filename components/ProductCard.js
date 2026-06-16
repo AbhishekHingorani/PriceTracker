@@ -67,7 +67,7 @@ export default function ProductCard({ product, onUpdate, onDelete }) {
       } else {
         setCurrentProduct(data.product);
         if (onUpdate) onUpdate(data.product);
-        showToast('success', `Updated: $${data.product.lastPrice?.toFixed(2)}`);
+        showToast('success', `Updated: ₹${data.product.lastPrice?.toFixed(2)}`);
       }
     } catch {
       showToast('error', 'Network error — check your connection');
@@ -176,7 +176,7 @@ export default function ProductCard({ product, onUpdate, onDelete }) {
                 <input type="url" name="url" value={editForm.url} onChange={handleEditChange} className={INPUT_CLASS} required />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Target Price (USD)</label>
+                <label className="block text-xs font-medium text-gray-600 mb-1">Target Price (INR)</label>
                 <input type="number" name="targetPrice" value={editForm.targetPrice} onChange={handleEditChange} step="0.01" min="0.01" className={INPUT_CLASS} required />
               </div>
               <div>
@@ -265,14 +265,14 @@ export default function ProductCard({ product, onUpdate, onDelete }) {
         <div>
           <p className="text-xs text-gray-500 mb-0.5">Current</p>
           <p className={`text-2xl font-bold ${isBelowTarget ? 'text-green-600' : 'text-gray-900'}`}>
-            {currentProduct.lastPrice !== null ? `$${currentProduct.lastPrice.toFixed(2)}` : '—'}
+            {currentProduct.lastPrice !== null ? `₹${currentProduct.lastPrice.toFixed(2)}` : '—'}
           </p>
         </div>
         <div className="w-px h-10 bg-gray-200 shrink-0" />
         <div>
           <p className="text-xs text-gray-500 mb-0.5">Target</p>
           <p className="text-2xl font-bold text-indigo-600">
-            ${currentProduct.targetPrice.toFixed(2)}
+            ₹{currentProduct.targetPrice.toFixed(2)}
           </p>
         </div>
         {isBelowTarget && (
@@ -285,9 +285,9 @@ export default function ProductCard({ product, onUpdate, onDelete }) {
       {/* ── Stats row ──────────────────────────────────────────────────────── */}
       {stats.min !== null && (
         <div className="flex gap-4 text-xs text-gray-500">
-          <span>Min <span className="text-gray-800 font-medium">${stats.min.toFixed(2)}</span></span>
-          <span>Max <span className="text-gray-800 font-medium">${stats.max.toFixed(2)}</span></span>
-          <span>Avg <span className="text-gray-800 font-medium">${stats.avg.toFixed(2)}</span></span>
+          <span>Min <span className="text-gray-800 font-medium">₹{stats.min.toFixed(2)}</span></span>
+          <span>Max <span className="text-gray-800 font-medium">₹{stats.max.toFixed(2)}</span></span>
+          <span>Avg <span className="text-gray-800 font-medium">₹{stats.avg.toFixed(2)}</span></span>
         </div>
       )}
 

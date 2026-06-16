@@ -137,11 +137,11 @@ export default function AddProductForm() {
       {/* ── Target Price ──────────────────────────────────────────────────── */}
       <div>
         <label htmlFor="targetPrice" className={LABEL_CLASS}>
-          Target Price (USD) <span className="text-red-500">*</span>
+          Target Price (INR) <span className="text-red-500">*</span>
         </label>
         <div className="relative">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm select-none">
-            $
+            ₹
           </span>
           <input
             id="targetPrice"

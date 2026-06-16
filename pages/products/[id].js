@@ -47,7 +47,7 @@ export default function ProductDetail({ product: initialProduct }) {
         showToast('error', data.error || 'Price check failed');
       } else {
         setProduct(data.product);
-        showToast('success', `Price updated: $${data.product.lastPrice?.toFixed(2)}`);
+        showToast('success', `Price updated: ₹${data.product.lastPrice?.toFixed(2)}`);
       }
     } catch {
       showToast('error', 'Network error — check your connection');
@@ -117,7 +117,7 @@ export default function ProductDetail({ product: initialProduct }) {
                   isBelowTarget ? 'text-green-600' : 'text-gray-900'
                 }`}
               >
-                {product.lastPrice !== null ? `$${product.lastPrice.toFixed(2)}` : '—'}
+                {product.lastPrice !== null ? `₹${product.lastPrice.toFixed(2)}` : '—'}
               </p>
               {isBelowTarget && (
                 <span className="inline-block mt-1 text-xs font-semibold bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
@@ -128,7 +128,7 @@ export default function ProductDetail({ product: initialProduct }) {
             <div>
               <p className="text-xs text-gray-500 mb-0.5">Target Price</p>
               <p className="text-4xl font-bold text-indigo-600">
-                ${product.targetPrice.toFixed(2)}
+                ₹{product.targetPrice.toFixed(2)}
               </p>
             </div>
           </div>
@@ -143,7 +143,7 @@ export default function ProductDetail({ product: initialProduct }) {
               ].map(({ label, value }) => (
                 <div key={label}>
                   <p className="text-xs text-gray-400">{label}</p>
-                  <p className="font-semibold text-gray-800">${value.toFixed(2)}</p>
+                  <p className="font-semibold text-gray-800">₹{value.toFixed(2)}</p>
                 </div>
               ))}
             </div>
@@ -230,7 +230,7 @@ export default function ProductDetail({ product: initialProduct }) {
                     <tr key={i} className="border-b border-gray-50 last:border-0 hover:bg-gray-50">
                       <td className="py-2.5 text-gray-600">{formatDate(entry.timestamp)}</td>
                       <td className="py-2.5 text-gray-900 font-semibold text-right">
-                        ${entry.price.toFixed(2)}
+                        ₹{entry.price.toFixed(2)}
                       </td>
                     </tr>
                   ))}

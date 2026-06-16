@@ -58,6 +58,7 @@ export default async function handler(req, res) {
       lastPrice:    null,
       lastChecked:  null,
       alertSent:    false,
+      errorAlertSent: false,
       priceHistory: [],
       createdAt:    new Date(),
     };

@@ -45,12 +45,12 @@ export default function PriceGraphInner({ priceHistory, compact }) {
           tick={{ fontSize: compact ? 10 : 12, fill: '#9ca3af' }}
           tickLine={false}
           axisLine={false}
-          tickFormatter={(v) => `$${v.toFixed(0)}`}
+          tickFormatter={(v) => `₹${v.toFixed(0)}`}
           width={compact ? 36 : 50}
         />
 
         <Tooltip
-          formatter={(value) => [`$${value.toFixed(2)}`, 'Price']}
+          formatter={(value) => [`₹${value.toFixed(2)}`, 'Price']}
           contentStyle={{
             borderRadius: '8px',
             border:       '1px solid #e5e7eb',

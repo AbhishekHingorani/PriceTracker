@@ -53,7 +53,7 @@ export default async function handler(req, res) {
     if (error) {
       console.error(`[cron] Failed "${product.name}": ${error}`);
     } else {
-      console.log(`[cron] OK "${product.name}" → $${scrapedPrice}`);
+      console.log(`[cron] OK "${product.name}" → ₹${scrapedPrice}`);
     }
   }
 
