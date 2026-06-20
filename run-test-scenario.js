@@ -1,6 +1,6 @@
-const baseUrl = 'http://localhost:3000';
+const baseUrl = 'http://127.0.0.1:3000';
 
-async function testScenario({ name, url, cssSelector, expectedMsg }) {
+async function testScenario({ name, url, cssSelector, expectedMsg, triggerCount }) {
   console.log(`\n--- Starting Scenario: ${name} ---`);
   console.log(`Expected outcome: ${expectedMsg}`);
 
@@ -27,22 +27,25 @@ async function testScenario({ name, url, cssSelector, expectedMsg }) {
   console.log(`Product created with ID: ${product._id}`);
   
   // 2. Trigger check
-  console.log('Manually triggering the price check...');
-  const checkRes = await fetch(`${baseUrl}/api/products/${product._id}/check`, {
-    method: 'POST'
-  });
+  console.log(`Manually triggering the price check ${triggerCount || 1} times...`);
   
-  // 3. Output result
-  if (!checkRes.ok) {
-    if (checkRes.status === 422) {
-      const errResult = await checkRes.json();
-      console.log(`Check finished with expected error: ${errResult.error}`);
+  for (let i = 1; i <= (triggerCount || 1); i++) {
+    const checkRes = await fetch(`${baseUrl}/api/products/${product._id}/check`, {
+      method: 'POST'
+    });
+    
+    // 3. Output result
+    if (!checkRes.ok) {
+      if (checkRes.status === 422) {
+        const errResult = await checkRes.json();
+        console.log(`[Trigger ${i}] Check finished with expected error: ${errResult.error}`);
+      } else {
+        console.error(`[Trigger ${i}] Failed to check price:`, await checkRes.text());
+      }
     } else {
-      console.error('Failed to check price:', await checkRes.text());
+      const result = await checkRes.json();
+      console.log(`[Trigger ${i}] Check completed! Scraped Price: $${result.scrapedPrice}`);
     }
-  } else {
-    const result = await checkRes.json();
-    console.log(`Check completed! Scraped Price: $${result.scrapedPrice}`);
   }
   
   // 4. Cleanup
@@ -70,14 +73,16 @@ async function run() {
     name: 'Test Scrape Error Product',
     url: `${baseUrl}/test.html`,
     cssSelector: '#non-existent-id-12345',
-    expectedMsg: 'Error notification sent due to missing selector'
+    expectedMsg: 'Error notification sent due to missing selector AFTER 3 TRIGGERS',
+    triggerCount: 3
   });
 
   await testScenario({
     name: 'Test Fetch Error Product',
-    url: `http://localhost:3000/api/non-existent-endpoint-that-will-404`,
+    url: `${baseUrl}/api/non-existent-endpoint-that-will-404`,
     cssSelector: '#price',
-    expectedMsg: 'Error notification sent due to HTTP 404'
+    expectedMsg: 'Error notification sent due to HTTP 404 AFTER 3 TRIGGERS',
+    triggerCount: 3
   });
 }
 

@@ -81,6 +81,7 @@ export default async function handler(req, res) {
       alertSent2:   false,
       alertSent3:   false,
       errorAlertSent: false,
+      lastError:    null,
       priceHistory: [],
       createdAt:    new Date(),
     };

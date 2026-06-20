@@ -47,6 +47,9 @@ export default function ProductDetail({ product: initialProduct }) {
       const data = await res.json();
 
       if (!res.ok) {
+        if (data.product) {
+          setProduct(data.product);
+        }
         showToast('error', data.error || 'Price check failed');
       } else {
         setProduct(data.product);
@@ -97,6 +100,19 @@ export default function ProductDetail({ product: initialProduct }) {
 
         {/* ── Product overview card ─────────────────────────────────────── */}
         <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 mb-5">
+
+          {/* ── Error Banner ──────────────────────────────────────────────── */}
+          {product.lastError && (
+            <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-5 flex items-start gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mt-0.5 shrink-0 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+              <div className="flex-1">
+                <span className="font-semibold block mb-0.5">Last price check failed</span>
+                <span className="opacity-90 leading-relaxed">{product.lastError}</span>
+              </div>
+            </div>
+          )}
 
           {/* Header */}
           <div className="mb-5">

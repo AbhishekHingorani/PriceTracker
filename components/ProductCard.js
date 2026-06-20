@@ -67,6 +67,10 @@ export default function ProductCard({ product, onUpdate, onDelete }) {
       const res  = await fetch(`/api/products/${currentProduct._id}/check`, { method: 'POST' });
       const data = await res.json();
       if (!res.ok) {
+        if (data.product) {
+          setCurrentProduct(data.product);
+          if (onUpdate) onUpdate(data.product);
+        }
         showToast('error', data.error || 'Price check failed');
       } else {
         setCurrentProduct(data.product);
@@ -242,6 +246,19 @@ export default function ProductCard({ product, onUpdate, onDelete }) {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── Error Banner ────────────────────────────────────────────────────── */}
+      {currentProduct.lastError && (
+        <div className="bg-red-50 border border-red-200 text-red-700 text-xs px-3 py-2 rounded-lg mb-1 flex items-start gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mt-0.5 shrink-0 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+          </svg>
+          <div className="flex-1">
+            <span className="font-semibold block mb-0.5">Last check failed</span>
+            <span className="opacity-90">{currentProduct.lastError}</span>
           </div>
         </div>
       )}

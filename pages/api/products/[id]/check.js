@@ -42,7 +42,7 @@ export default async function handler(req, res) {
   const { updatedProduct, scrapedPrice, apiPrice, error } = await checkProductPrice(product);
 
   if (error) {
-    return res.status(422).json({ error, scrapedPrice, apiPrice });
+    return res.status(422).json({ error, scrapedPrice, apiPrice, product: updatedProduct });
   }
 
   return res.status(200).json({ product: updatedProduct, scrapedPrice, apiPrice });
